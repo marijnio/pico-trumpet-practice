@@ -21,6 +21,12 @@ function _init()
   play_along_timer = 0
   failed = false
   
+  -- difficulty ranges
+  min_air = 1
+  max_air = 5
+  is_bb = true
+  tempo = 60
+  
   -- database of notes (f#3 to g5)
   -- y: standard treble clef positioning (F5 = 24, E4 = 56)
   -- v: valves, air: partial (1-5), w: srs weight, p: pico-8 pitch index (F#3=18 to G5=43)
@@ -30,7 +36,7 @@ function _init()
     {name="g3",  y=76, v={true,false,true}, air=1, p=19},
     {name="g#3", y=76, v={false,true,true}, air=1, p=20},
     {name="a3",  y=72, v={true,true,false}, air=1, p=21},
-    {name="bb3", y=68, v={true,false,false}, air=1, p=22},
+    {name="bB3", y=68, v={true,false,false}, air=1, p=22},
     {name="b3",  y=68, v={false,true,false}, air=1, p=23},
     {name="c4",  y=64, v={false,false,false}, air=1, p=24},
     -- 2nd partial
@@ -44,7 +50,7 @@ function _init()
     -- 3rd partial
     {name="g#4", y=48, v={false,true,true}, air=3, p=32},
     {name="a4",  y=44, v={true,true,false}, air=3, p=33},
-    {name="bb4", y=40, v={true,false,false}, air=3, p=34},
+    {name="bB4", y=40, v={true,false,false}, air=3, p=34},
     {name="b4",  y=40, v={false,true,false}, air=3, p=35},
     {name="c5",  y=36, v={false,false,false}, air=3, p=36},
     -- 4th partial
@@ -58,20 +64,70 @@ function _init()
     {name="g5",  y=20, v={false,false,false}, air=5, p=43}
   }
   
+  -- background stars
+  stars = {}
+  for i=1,25 do
+    add(stars, {
+      x = rnd(128),
+      y = rnd(128),
+      speed = 0.2 + rnd(0.8),
+      col = rnd({5, 6, 13})
+    })
+  end
+  
   pick_new_note()
 end
 
 function pick_new_note()
-  note = rnd(notes)
+  local active_notes = {}
+  for n in all(notes) do
+    if n.air >= min_air and n.air <= max_air then
+      add(active_notes, n)
+    end
+  end
+  
+  if #active_notes == 0 then
+    note = rnd(notes)
+  else
+    note = rnd(active_notes)
+  end
+  
   user_v = {false, false, false}
-  user_air = 2 -- default
+  user_air = min_air -- default
 end
 
 function _update()
   if state == "menu" then
+    for s in all(stars) do
+      s.y -= s.speed
+      if s.y < 0 then
+        s.y = 128
+        s.x = rnd(128)
+      end
+    end
     if btnp(2) then menu_opt = max(1, menu_opt - 1) end
-    if btnp(3) then menu_opt = min(3, menu_opt + 1) end
-    if btnp(4) then
+    if btnp(3) then menu_opt = min(7, menu_opt + 1) end
+    
+    if menu_opt == 4 then
+      if btnp(0) then min_air = max(1, min_air - 1) end
+      if btnp(1) then 
+        min_air = min(5, min_air + 1) 
+        if max_air < min_air then max_air = min_air end
+      end
+    elseif menu_opt == 5 then
+      if btnp(0) then 
+        max_air = max(1, max_air - 1) 
+        if min_air > max_air then min_air = max_air end
+      end
+      if btnp(1) then max_air = min(5, max_air + 1) end
+    elseif menu_opt == 6 then
+      if btnp(0) or btnp(1) then is_bb = not is_bb end
+    elseif menu_opt == 7 then
+      if btnp(0) then tempo = max(40, tempo - 5) end
+      if btnp(1) then tempo = min(120, tempo + 5) end
+    end
+    
+    if btnp(4) and menu_opt <= 3 then
       if menu_opt == 1 then
         state = "quiz"
         score = 0
@@ -84,7 +140,7 @@ function _update()
         play_along_timer = 0
         failed = false
         pick_new_note()
-      else
+      elseif menu_opt == 3 then
         state = "reference"
         ref_idx = 1
       end
@@ -137,15 +193,16 @@ function _update()
       return
     end
     
-    local beat_len = 30
-    local cycle_len = 360
+    local beat_len = flr(1800 / tempo)
+    local cycle_len = beat_len * 12
     
     if play_along_timer % beat_len == 0 then
       local beat = flr(play_along_timer / beat_len) + 1
       play_click()
       
       if beat == 5 then
-        play_pitch(note.p)
+        local p = is_bb and note.p - 2 or note.p
+        play_pitch(p)
       elseif beat == 9 then
         stop_pitch()
       end
@@ -182,22 +239,44 @@ function _draw()
   cls(1)
   
   if state == "menu" then
+    for s in all(stars) do
+      pset(s.x, s.y, s.col)
+    end
+    
     rectfill(0, 0, 128, 12, 0)
     print("trumpet trainer", 4, 4, 7)
     
-    print("select mode:", 36, 32, 6)
+    rect(12, 24, 116, 101, 5)
+    
+    print("select mode:", 36, 28, 6)
     
     local c1 = menu_opt == 1 and 10 or 6
     local c2 = menu_opt == 2 and 10 or 6
     local c3 = menu_opt == 3 and 10 or 6
+    local c4 = menu_opt == 4 and 10 or 6
+    local c5 = menu_opt == 5 and 10 or 6
+    local c6 = menu_opt == 6 and 10 or 6
+    local c7 = menu_opt == 7 and 10 or 6
     
-    print("practice", 48, 50, c1)
-    print("play-along", 48, 62, c2)
-    print("reference", 48, 74, c3)
+    local sel_y = 38 + (menu_opt - 1) * 9
+    rectfill(24, sel_y - 1, 108, sel_y + 6, 2)
     
-    local sel_y = 50 + (menu_opt - 1) * 12
-    print(">", 40, sel_y, 10)
-    print("press \142 to start", 30, 104, 7)
+    print("practice", 36, 38, c1)
+    print("play-along", 36, 47, c2)
+    print("reference", 36, 56, c3)
+    print("min air: < "..min_air.." >", 36, 65, c4)
+    print("max air: < "..max_air.." >", 36, 74, c5)
+    print("trumpet: < ".. (is_bb and "bB" or "c") .." >", 36, 83, c6)
+    print("tempo: < "..tempo.." > bpm", 36, 92, c7)
+    
+    local arrow_x = 28 + sin(t() * 2) * 2
+    print(">", arrow_x, sel_y, 10)
+    
+    if menu_opt <= 3 then
+      print("press \142 to start", 28, 104, 7)
+    else
+      print("adjust with \139/\145", 34, 104, 7)
+    end
     return
   end
   
@@ -220,6 +299,9 @@ function _draw()
   
   local draw_note = state == "reference" and notes[ref_idx] or note
   
+  -- note letter name
+  print(draw_note.name, 4, 38, 10)
+  
   -- dynamic ledger lines
   local l_y = 64
   while l_y <= draw_note.y do
@@ -229,7 +311,7 @@ function _draw()
   
   -- accidentals (sharp/flat)
   local acc = sub(draw_note.name, 2, 2)
-  if acc == "#" or acc == "b" then
+  if acc == "#" or acc == "b" or acc == "B" then
     print(acc, 54, draw_note.y - 2, 7)
   end
   
@@ -257,7 +339,8 @@ function _draw()
   elseif state == "play_along" then
     print("any key: flag wrong", 34, 14, 6)
     
-    local beat = flr(play_along_timer / 30) + 1
+    local beat_len = flr(1800 / tempo)
+    local beat = flr(play_along_timer / beat_len) + 1
     local beat_in_phase = ((beat - 1) % 4) + 1
     
     local phase_name = "prepare"
@@ -302,7 +385,8 @@ function draw_valves(start_x, y)
   
   local reveal = true
   if state == "play_along" then
-    local beat = flr(play_along_timer / 30) + 1
+    local beat_len = flr(1800 / tempo)
+    local beat = flr(play_along_timer / beat_len) + 1
     if beat <= 8 then
       reveal = false
     end
@@ -338,7 +422,8 @@ function draw_air()
   
   local reveal = true
   if state == "play_along" then
-    local beat = flr(play_along_timer / 30) + 1
+    local beat_len = flr(1800 / tempo)
+    local beat = flr(play_along_timer / beat_len) + 1
     if beat <= 8 then
       reveal = false
     else

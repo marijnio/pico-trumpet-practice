@@ -27,8 +27,8 @@ Since the application is designed to be played on handheld retro consoles (like 
 
 | PICO-8 Input | Desktop Key | Handheld Button | Menu / Reference Action | Quiz Mode Action |
 |---|---|---|---|---|
-| **Left** | `Left Arrow` | **D-Pad Left** | Navigate Reference (Prev) | Toggle **Valve 1** (1st valve) |
-| **Right** | `Right Arrow` | **D-Pad Right** | Navigate Reference (Next) | Toggle **Valve 3** (3rd valve) |
+| **Left** | `Left Arrow` | **D-Pad Left** | Adjust settings (on menu) / Navigate Reference (Prev) | Toggle **Valve 1** (1st valve) |
+| **Right** | `Right Arrow` | **D-Pad Right** | Adjust settings (on menu) / Navigate Reference (Next) | Toggle **Valve 3** (3rd valve) |
 | **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Raise **Air Pressure** (if holding X/Button 2) |
 | **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (if X is *not* held) / Lower **Air Pressure** (if holding X) |
 | **Button 1 (O)** | `Z` / `C` | **A** | Confirm / Select | **Submit Answer** |
@@ -41,7 +41,7 @@ Since the application is designed to be played on handheld retro consoles (like 
 
 ## 🥁 Hands-Free Play-Along Mode
 
-The **Play-Along Mode** is designed for practice sessions where you are holding and playing a physical trumpet. Because you cannot easily press valve combinations on the PICO-8 device while playing, this mode runs on a continuous **12-beat loop** (12 seconds total per note at 60 BPM):
+The **Play-Along Mode** is designed for practice sessions where you are holding and playing a physical trumpet. Because you cannot easily press valve combinations on the PICO-8 device while playing, this mode runs on a continuous **12-beat loop** (which is 12 seconds total per note at 60 BPM, scaling dynamically based on the configured menu tempo):
 
 1. **Prepare Phase (Beats 1-4):**
    * The staff displays the target note.
