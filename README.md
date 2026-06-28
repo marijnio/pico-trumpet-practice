@@ -14,8 +14,9 @@ This tool helps trumpet players practice both **valve fingerings** and **air pre
   * **Valves:** Simulates the three physical trumpet valves.
   * **Air Pressure / Partials:** Simulates embouchure and air speed requirements by dividing notes into 5 air levels (harmonic partial groups).
 * **Spaced Repetition System (SRS):** Every note has an adjustable weight ($w$). When you guess a note correctly, its weight decreases (making it less frequent); when you get it wrong, its weight increases (making it repeat more often).
-* **Reference & Quiz Modes:** 
-  * **Quiz Mode:** Tests your recall of both valve fingerings and air pressure levels.
+* **Three Flexible Modes:** 
+  * **Quiz Mode:** Tests your recall of both valve fingerings and air pressure levels using interactive controls on the device.
+  * **Play-Along Mode (Hands-Free):** Specifically designed for practicing with your **actual trumpet** in hand. It guides you rhythmically using audio metronome clicks and pitches.
   * **Reference Mode:** Allows you to browse through all notes chronologically to review their correct fingerings and air levels.
 
 ---
@@ -35,6 +36,31 @@ Since the application is designed to be played on handheld retro consoles (like 
 
 > [!NOTE]
 > **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, **hold the B button (X key)** and press **D-Pad Up** or **D-Pad Down**. Letting go of the B button returns the D-pad to normal valve control.
+
+---
+
+## 🥁 Hands-Free Play-Along Mode
+
+The **Play-Along Mode** is designed for practice sessions where you are holding and playing a physical trumpet. Because you cannot easily press valve combinations on the PICO-8 device while playing, this mode runs on a continuous **12-beat loop** (12 seconds total per note at 60 BPM):
+
+1. **Prepare Phase (Beats 1-4):**
+   * The staff displays the target note.
+   * The fingerings and air pressure indicators are hidden (marked with `?` or grayed out).
+   * A metronome click plays on each beat to give you a count-in.
+2. **Play Phase (Beats 5-8):**
+   * Play the note on your physical trumpet!
+   * The metronome continues clicking.
+   * The console plays a sustained **reference pitch tone** corresponding to the note. Use this tone to guide your pitch target and intonation.
+   * Fingerings remain hidden.
+3. **Reveal Phase (Beats 9-12):**
+   * The reference tone stops.
+   * The correct valve fingerings and air pressure level are revealed on screen.
+   * Verify your fingerings and partial against the diagram.
+
+### Hands-Free SRS Logging & Flagging:
+- **No button presses needed for correct answers:** At the end of the 12 beats, if you do nothing, the system automatically grades the note as **correct** (decreasing its SRS weight) and moves to the next note.
+- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `X` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and increase the note's SRS weight at the end of the cycle.
+- **Exiting:** Press the **B button / X key** at any time to immediately stop the pitch drone and return to the main menu.
 
 ---
 
@@ -60,7 +86,7 @@ The program uses an adaptive learning algorithm based on weight adjustment:
 2. The trainer selects notes using weighted random distribution:
    $$\text{Probability}(N) = \frac{w_N}{\sum w_i}$$
 3. **Correct Answer:** Decreases the note weight by 50% (down to a minimum of `0.2`), making it appear less often.
-4. **Incorrect Answer:** Increases the note weight by `2.0` (up to a maximum of `10.0`), prompting the system to repeat it until you master it.
+4. **Incorrect / Flagged Answer:** Increases the note weight by `2.0` (up to a maximum of `10.0`), prompting the system to repeat it until you master it.
 5. The weight ($w$) of the currently active note is displayed in the top-left corner during practice.
 
 ---
