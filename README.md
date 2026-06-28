@@ -2,7 +2,7 @@
 
 An interactive, game-like educational application for the **PICO-8 fantasy console**, specifically designed and optimized for retro handheld devices (such as the **ANBERNIC RG35XXSP**, Miyoo Mini, and similar devices) as well as desktop emulators and web players.
 
-This tool helps trumpet players practice both **valve fingerings** and **air pressure partials** (representing embouchure and pitch targeting) across a chromatic range of 26 notes (from F#3 to G5) using an adaptive learning algorithm.
+This tool helps trumpet players practice both **valve fingerings** and **air pressure partials** (representing embouchure and pitch targeting) across a chromatic range of 26 notes (from F#3 to G5) using a randomized practice engine.
 
 ---
 
@@ -13,7 +13,7 @@ This tool helps trumpet players practice both **valve fingerings** and **air pre
 * **Valve & Air Representation:**
   * **Valves:** Simulates the three physical trumpet valves.
   * **Air Pressure / Partials:** Simulates embouchure and air speed requirements by dividing notes into 5 air levels (harmonic partial groups).
-* **Spaced Repetition System (SRS):** Every note has an adjustable weight ($w$). When you guess a note correctly, its weight decreases (making it less frequent); when you get it wrong, its weight increases (making it repeat more often).
+* **Randomized Selection:** Every note in the range has an equal chance of appearing, providing a uniform practice distribution across the entire database.
 * **Three Flexible Modes:** 
   * **Quiz Mode:** Tests your recall of both valve fingerings and air pressure levels using interactive controls on the device.
   * **Play-Along Mode (Hands-Free):** Specifically designed for practicing with your **actual trumpet** in hand. It guides you rhythmically using audio metronome clicks and pitches.
@@ -57,9 +57,9 @@ The **Play-Along Mode** is designed for practice sessions where you are holding 
    * The correct valve fingerings and air pressure level are revealed on screen.
    * Verify your fingerings and partial against the diagram.
 
-### Hands-Free SRS Logging & Flagging:
-- **No button presses needed for correct answers:** At the end of the 12 beats, if you do nothing, the system automatically grades the note as **correct** (decreasing its SRS weight) and moves to the next note.
-- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `X` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and increase the note's SRS weight at the end of the cycle.
+### Hands-Free Logging & Flagging:
+- **No button presses needed for correct answers:** At the end of the 12 beats, if you do nothing, the system automatically grades the note as **correct** (adding to your score) and moves to the next note.
+- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `X` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and record the answer as wrong at the end of the cycle.
 - **Exiting:** Press the **B button / X key** at any time to immediately stop the pitch drone and return to the main menu.
 
 ---
@@ -75,19 +75,6 @@ This application represents this mechanic via **Air levels (1–5)**:
 * **Level 3 (3rd Partial Group):** G#4 to C5 (e.g., C5 is open `0-0-0` on Air 3)
 * **Level 4 (4th Partial Group):** C#5 to E5 (e.g., E5 is open `0-0-0` on Air 4)
 * **Level 5 (5th Partial Group):** F5 to G5 (e.g., G5 is open `0-0-0` on Air 5)
-
----
-
-## 🧠 Spaced Repetition (SRS) Engine
-
-The program uses an adaptive learning algorithm based on weight adjustment:
-
-1. All notes start with a base difficulty weight of `1.0`.
-2. The trainer selects notes using weighted random distribution:
-   $$\text{Probability}(N) = \frac{w_N}{\sum w_i}$$
-3. **Correct Answer:** Decreases the note weight by 50% (down to a minimum of `0.2`), making it appear less often.
-4. **Incorrect / Flagged Answer:** Increases the note weight by `2.0` (up to a maximum of `10.0`), prompting the system to repeat it until you master it.
-5. The weight ($w$) of the currently active note is displayed in the top-left corner during practice.
 
 ---
 

@@ -26,56 +26,43 @@ function _init()
   -- v: valves, air: partial (1-5), w: srs weight, p: pico-8 pitch index (F#3=18 to G5=43)
   notes = {
     -- 1st partial
-    {name="f#3", y=80, v={true,true,true}, air=1, w=1.0, p=18},
-    {name="g3",  y=76, v={true,false,true}, air=1, w=1.0, p=19},
-    {name="g#3", y=76, v={false,true,true}, air=1, w=1.0, p=20},
-    {name="a3",  y=72, v={true,true,false}, air=1, w=1.0, p=21},
-    {name="bb3", y=68, v={true,false,false}, air=1, w=1.0, p=22},
-    {name="b3",  y=68, v={false,true,false}, air=1, w=1.0, p=23},
-    {name="c4",  y=64, v={false,false,false}, air=1, w=1.0, p=24},
+    {name="f#3", y=80, v={true,true,true}, air=1, p=18},
+    {name="g3",  y=76, v={true,false,true}, air=1, p=19},
+    {name="g#3", y=76, v={false,true,true}, air=1, p=20},
+    {name="a3",  y=72, v={true,true,false}, air=1, p=21},
+    {name="bb3", y=68, v={true,false,false}, air=1, p=22},
+    {name="b3",  y=68, v={false,true,false}, air=1, p=23},
+    {name="c4",  y=64, v={false,false,false}, air=1, p=24},
     -- 2nd partial
-    {name="c#4", y=64, v={true,true,true}, air=2, w=1.0, p=25},
-    {name="d4",  y=60, v={true,false,true}, air=2, w=1.0, p=26},
-    {name="d#4", y=60, v={false,true,true}, air=2, w=1.0, p=27},
-    {name="e4",  y=56, v={true,true,false}, air=2, w=1.0, p=28},
-    {name="f4",  y=52, v={true,false,false}, air=2, w=1.0, p=29},
-    {name="f#4", y=52, v={false,true,false}, air=2, w=1.0, p=30},
-    {name="g4",  y=48, v={false,false,false}, air=2, w=1.0, p=31},
+    {name="c#4", y=64, v={true,true,true}, air=2, p=25},
+    {name="d4",  y=60, v={true,false,true}, air=2, p=26},
+    {name="d#4", y=60, v={false,true,true}, air=2, p=27},
+    {name="e4",  y=56, v={true,true,false}, air=2, p=28},
+    {name="f4",  y=52, v={true,false,false}, air=2, p=29},
+    {name="f#4", y=52, v={false,true,false}, air=2, p=30},
+    {name="g4",  y=48, v={false,false,false}, air=2, p=31},
     -- 3rd partial
-    {name="g#4", y=48, v={false,true,true}, air=3, w=1.0, p=32},
-    {name="a4",  y=44, v={true,true,false}, air=3, w=1.0, p=33},
-    {name="bb4", y=40, v={true,false,false}, air=3, w=1.0, p=34},
-    {name="b4",  y=40, v={false,true,false}, air=3, w=1.0, p=35},
-    {name="c5",  y=36, v={false,false,false}, air=3, w=1.0, p=36},
+    {name="g#4", y=48, v={false,true,true}, air=3, p=32},
+    {name="a4",  y=44, v={true,true,false}, air=3, p=33},
+    {name="bb4", y=40, v={true,false,false}, air=3, p=34},
+    {name="b4",  y=40, v={false,true,false}, air=3, p=35},
+    {name="c5",  y=36, v={false,false,false}, air=3, p=36},
     -- 4th partial
-    {name="c#5", y=36, v={true,true,false}, air=4, w=1.0, p=37},
-    {name="d5",  y=32, v={true,false,false}, air=4, w=1.0, p=38},
-    {name="d#5", y=32, v={false,true,false}, air=4, w=1.0, p=39},
-    {name="e5",  y=28, v={false,false,false}, air=4, w=1.0, p=40},
+    {name="c#5", y=36, v={true,true,false}, air=4, p=37},
+    {name="d5",  y=32, v={true,false,false}, air=4, p=38},
+    {name="d#5", y=32, v={false,true,false}, air=4, p=39},
+    {name="e5",  y=28, v={false,false,false}, air=4, p=40},
     -- 5th partial
-    {name="f5",  y=24, v={true,false,false}, air=5, w=1.0, p=41},
-    {name="f#5", y=24, v={false,true,false}, air=5, w=1.0, p=42},
-    {name="g5",  y=20, v={false,false,false}, air=5, w=1.0, p=43}
+    {name="f5",  y=24, v={true,false,false}, air=5, p=41},
+    {name="f#5", y=24, v={false,true,false}, air=5, p=42},
+    {name="g5",  y=20, v={false,false,false}, air=5, p=43}
   }
   
   pick_new_note()
 end
 
 function pick_new_note()
-  local total_w = 0
-  for n in all(notes) do
-    total_w += n.w
-  end
-  
-  local r = rnd(total_w)
-  for n in all(notes) do
-    r -= n.w
-    if r <= 0 then
-      note = n
-      break
-    end
-  end
-  
+  note = rnd(notes)
   user_v = {false, false, false}
   user_air = 2 -- default
 end
@@ -129,11 +116,9 @@ function _update()
       if valves_correct and air_correct then
         is_correct = true
         score += 1
-        note.w = max(0.2, note.w * 0.5)
         sfx(0)
       else
         is_correct = false
-        note.w = min(10.0, note.w + 2.0)
         sfx(1)
       end
       state = "result"
@@ -181,10 +166,7 @@ function _update()
     play_along_timer += 1
     
     if play_along_timer >= cycle_len then
-      if failed then
-        note.w = min(10.0, note.w + 2.0)
-      else
-        note.w = max(0.2, note.w * 0.5)
+      if not failed then
         score += 1
       end
       total += 1
@@ -226,7 +208,6 @@ function _draw()
   if state == "quiz" or state == "result" or state == "play_along" then
     local score_str = score.."/"..total
     print(score_str, 124 - #score_str * 4, 4, 10)
-    print("w:"..(flr(note.w*10)/10), 2, 14, 5)
   elseif state == "reference" then
     print("reference", 92, 4, 10)
   end
