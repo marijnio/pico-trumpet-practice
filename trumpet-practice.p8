@@ -25,7 +25,7 @@ function _init()
   min_air = 1
   max_air = 2
   is_bb = true
-  tempo = 60
+  tempo = 80
 
   -- database of notes (f#3 to g5)
   -- y: standard treble clef positioning (F5 = 24, E4 = 56)
