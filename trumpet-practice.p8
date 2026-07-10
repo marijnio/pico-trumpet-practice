@@ -560,6 +560,9 @@ function draw_valves(start_x, y)
   if state == "reference" then
     if ref_flavor == "list" then
       draw_note = notes[ref_idx]
+    else
+      local p = get_pitch(ref_v, ref_air)
+      draw_note = find_note_by_pitch(p)
     end
   else
     draw_note = note
@@ -571,6 +574,19 @@ function draw_valves(start_x, y)
     local beat = flr(play_along_timer / beat_len) + 1
     if beat <= 8 then
       reveal = false
+    end
+  elseif state == "quiz" then
+    reveal = false
+  end
+
+  local slide_1_out = false
+  local slide_3_out = false
+  if draw_note then
+    local name = draw_note.name
+    if name == "f#3" or name == "g3" or name == "c#4" or name == "d4" then
+      slide_3_out = true
+    elseif name == "a4" or name == "d5" then
+      slide_1_out = true
     end
   end
 
@@ -585,6 +601,21 @@ function draw_valves(start_x, y)
       end
     elseif (state == "result" and not is_correct) or (state == "play_along" and reveal) then
       active = draw_note.v[i]
+    end
+
+    -- draw slides
+    if i == 1 then
+      if slide_1_out then
+        rect(vx - 10, y + 1, vx - 2, y + 5, 6)
+      else
+        rect(vx - 6, y + 1, vx - 2, y + 5, 5)
+      end
+    elseif i == 3 then
+      if slide_3_out then
+        rect(vx + 10, y + 1, vx + 18, y + 5, 6)
+      else
+        rect(vx + 10, y + 1, vx + 14, y + 5, 5)
+      end
     end
 
     rect(vx - 2, y - 8, vx + 10, y + 12, 5)
@@ -787,3 +818,4 @@ function pick_weighted_note(note_list)
   end
   return note_list[1]
 end
+
