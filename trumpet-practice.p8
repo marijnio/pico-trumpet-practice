@@ -127,7 +127,7 @@ function _update()
       if btnp(1) then tempo = min(120, tempo + 5) end
     end
     
-    if btnp(4) and menu_opt <= 3 then
+    if btnp(5) and menu_opt <= 3 then
       if menu_opt == 1 then
         state = "quiz"
         score = 0
@@ -149,20 +149,20 @@ function _update()
   elseif state == "reference" then
     if btnp(0) then ref_idx = max(1, ref_idx - 1) end
     if btnp(1) then ref_idx = min(#notes, ref_idx + 1) end
-    if btnp(5) then state = "menu" end
+    if btnp(4) then state = "menu" end
     
   elseif state == "quiz" then
     if btnp(0) then user_v[1] = not user_v[1] end
     if btnp(1) then user_v[3] = not user_v[3] end
     
-    if btn(5) then
+    if btn(4) then
       if btnp(2) then user_air = min(5, user_air + 1) end
       if btnp(3) then user_air = max(1, user_air - 1) end
     else
       if btnp(3) then user_v[2] = not user_v[2] end
     end
     
-    if btnp(4) then
+    if btnp(5) then
       total += 1
       local valves_correct = user_v[1] == note.v[1] and 
                              user_v[2] == note.v[2] and 
@@ -181,13 +181,13 @@ function _update()
     end
     
   elseif state == "result" then
-    if btnp(5) then
+    if btnp(4) then
       pick_new_note()
       state = "quiz"
     end
 
   elseif state == "play_along" then
-    if btnp(5) then
+    if btnp(4) then
       stop_pitch()
       state = "menu"
       return
@@ -209,11 +209,10 @@ function _update()
     end
     
     local pressed_any = false
-    for i=0,4 do
-      if btnp(i) then
-        pressed_any = true
-      end
+    for i=0,3 do
+      if btnp(i) then pressed_any = true end
     end
+    if btnp(5) then pressed_any = true end
     
     if pressed_any and not failed then
       failed = true
@@ -273,7 +272,7 @@ function _draw()
     print(">", arrow_x, sel_y, 10)
     
     if menu_opt <= 3 then
-      print("press \142 to start", 28, 104, 7)
+      print("press \151 to start", 28, 104, 7)
     else
       print("adjust with \139/\145", 34, 104, 7)
     end
@@ -323,8 +322,8 @@ function _draw()
   
   -- ui contextual instructions
   if state == "quiz" then
-    print("\139/\131/\145:valves \151+\148/\131:air", 8, 114, 6)
-    print("press \142 to submit", 28, 122, 7)
+    print("\139/\131/\145:valves \142+\148/\131:air", 8, 114, 6)
+    print("press \151 to submit", 28, 122, 7)
   elseif state == "result" then
     if is_correct then
       rectfill(0, 114, 128, 128, 11)
@@ -335,7 +334,7 @@ function _draw()
     end
   elseif state == "reference" then
     print("\139/\145: navigate notes", 22, 114, 6)
-    print("press \151 for menu", 30, 122, 7)
+    print("press \142 for menu", 30, 122, 7)
   elseif state == "play_along" then
     print("any key: flag wrong", 34, 14, 6)
     

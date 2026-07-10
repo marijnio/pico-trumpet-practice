@@ -29,13 +29,13 @@ Since the application is designed to be played on handheld retro consoles (like 
 |---|---|---|---|---|
 | **Left** | `Left Arrow` | **D-Pad Left** | Adjust settings (on menu) / Navigate Reference (Prev) | Toggle **Valve 1** (1st valve) |
 | **Right** | `Right Arrow` | **D-Pad Right** | Adjust settings (on menu) / Navigate Reference (Next) | Toggle **Valve 3** (3rd valve) |
-| **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Raise **Air Pressure** (if holding X/Button 2) |
-| **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (if X is *not* held) / Lower **Air Pressure** (if holding X) |
-| **Button 1 (O)** | `Z` / `C` | **A** | Confirm / Select | **Submit Answer** |
-| **Button 2 (X)** | `X` / `V` | **B** | Return to Menu | **Hold** to shift D-pad to air pressure control |
+| **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Raise **Air Pressure** (if holding O/Button 1) |
+| **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (if O is *not* held) / Lower **Air Pressure** (if holding O) |
+| **Button 1 (O)** | `Z` / `C` | **A** | Return to Menu | **Hold** to shift D-pad to air pressure control |
+| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select | **Submit Answer** |
 
 > [!NOTE]
-> **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, **hold the B button (X key)** and press **D-Pad Up** or **D-Pad Down**. Letting go of the B button returns the D-pad to normal valve control.
+> **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, **hold the A button (O key)** and press **D-Pad Up** or **D-Pad Down**. Letting go of the A button returns the D-pad to normal valve control.
 
 ---
 
@@ -59,8 +59,8 @@ The **Play-Along Mode** is designed for practice sessions where you are holding 
 
 ### Hands-Free Logging & Flagging:
 - **No button presses needed for correct answers:** At the end of the 12 beats, if you do nothing, the system automatically grades the note as **correct** (adding to your score) and moves to the next note.
-- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `X` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and record the answer as wrong at the end of the cycle.
-- **Exiting:** Press the **B button / X key** at any time to immediately stop the pitch drone and return to the main menu.
+- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `O` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and record the answer as wrong at the end of the cycle.
+- **Exiting:** Press the **A button / O key** at any time to immediately stop the pitch drone and return to the main menu.
 
 ---
 
