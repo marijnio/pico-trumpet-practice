@@ -29,13 +29,13 @@ Since the application is designed to be played on handheld retro consoles (like 
 |---|---|---|---|---|
 | **Left** | `Left Arrow` | **D-Pad Left** | Adjust settings (on menu) / Navigate Reference (Prev) | Toggle **Valve 1** (1st valve) |
 | **Right** | `Right Arrow` | **D-Pad Right** | Adjust settings (on menu) / Navigate Reference (Next) | Toggle **Valve 3** (3rd valve) |
-| **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Raise **Air Pressure** (if holding O/Button 1) |
-| **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (if O is *not* held) / Lower **Air Pressure** (if holding O) |
-| **Button 1 (O)** | `Z` / `C` | **A** | Return to Menu | **Hold** to shift D-pad to air pressure control |
-| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select | **Submit Answer** |
+| **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Cycle **Air Pressure** (1 to 5) |
+| **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (2nd valve) |
+| **Button 1 (O)** | `Z` / `C` | **A** | Return to Menu | **Quit / Return to Menu** |
+| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select | **Submit Answer** (in Quiz) / **Continue** (in Result) |
 
 > [!NOTE]
-> **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, **hold the A button (O key)** and press **D-Pad Up** or **D-Pad Down**. Letting go of the A button returns the D-pad to normal valve control.
+> **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, simply press **D-Pad Up** to cycle through air pressure levels 1–5.
 
 ---
 

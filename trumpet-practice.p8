@@ -156,11 +156,14 @@ function _update()
     if btnp(0) then user_v[1] = not user_v[1] end
     if btnp(1) then user_v[3] = not user_v[3] end
 
-    if btn(4) then
-      if btnp(2) then user_air = min(5, user_air + 1) end
-      if btnp(3) then user_air = max(1, user_air - 1) end
-    else
-      if btnp(3) then user_v[2] = not user_v[2] end
+    if btnp(2) then
+      user_air = user_air + 1
+      if user_air > 5 then user_air = 1 end
+    end
+    if btnp(3) then user_v[2] = not user_v[2] end
+
+    if btnp(4) then
+      state = "menu"
     end
 
     if btnp(5) then
@@ -182,6 +185,9 @@ function _update()
     end
   elseif state == "result" then
     if btnp(4) then
+      state = "menu"
+    end
+    if btnp(5) then
       pick_new_note()
       state = "quiz"
     end
@@ -336,15 +342,17 @@ function _draw()
 
   -- ui contextual instructions
   if state == "quiz" then
-    print("\139/\131/\145:valves \142+\148/\131:air", 8, 114, 6)
-    print("press \151 to submit", 28, 122, 7)
+    print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
+    print("\151:submit  \142:quit", 32, 122, 7)
   elseif state == "result" then
     if is_correct then
-      rectfill(0, 114, 128, 128, 11)
-      print("correct!", 48, 118, 0)
+      rectfill(0, 112, 128, 128, 11)
+      print("correct!", 48, 113, 0)
+      print("\151:next  \142:quit", 36, 121, 0)
     else
-      rectfill(0, 114, 128, 128, 8)
-      print("wrong! correct config shown", 12, 118, 7)
+      rectfill(0, 112, 128, 128, 8)
+      print("wrong! correct shown", 24, 113, 7)
+      print("\151:next  \142:quit", 36, 121, 7)
     end
   elseif state == "reference" then
     print("\139/\145: navigate notes", 22, 114, 6)
