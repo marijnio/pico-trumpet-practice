@@ -478,7 +478,7 @@ function _draw()
   elseif state == "play_along" then
     local beat_len = flr(1800 / tempo)
     local beat = flr(play_along_timer / beat_len) + 1
-    if beat >= 5 then
+    if beat >= 5 and beat <= 8 then
       happy = true
     end
     -- bounce and sway dance to the beat!
