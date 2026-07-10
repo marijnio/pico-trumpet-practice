@@ -80,6 +80,8 @@ function _init()
         col = rnd({ 5, 6, 13 })
       }
     )
+  end
+
   for n in all(notes) do
     n.w = 1
   end
@@ -401,6 +403,11 @@ function _draw()
     print("reference", 92, 4, 10)
   end
 
+  if state == "quiz" or state == "result" then
+    local mastery = flr(100 * (5 - note.w) / 4.8)
+    print("srs: " .. mastery .. "%", 4, 16, 6)
+  end
+
   -- treble clef staff
   for i = 0, 4 do
     local line_y = 24 + (i * 8)
@@ -464,6 +471,8 @@ function _draw()
 
   -- draw elephant mascot
   local happy = false
+  local ex = 18
+  local ey = 86
   if state == "result" then
     happy = is_correct
   elseif state == "play_along" then
@@ -472,10 +481,14 @@ function _draw()
     if beat >= 5 then
       happy = true
     end
+    -- bounce and sway dance to the beat!
+    local phase = (play_along_timer % beat_len) / beat_len
+    ey = ey - flr(sin(phase * 0.5) * 2)
+    ex = ex + (beat % 2 == 1 and 1 or -1) * flr(sin(phase * 0.5) * 2)
   elseif state == "reference" then
     happy = ref_playing
   end
-  draw_elephant(18, 86, happy, false)
+  draw_elephant(ex, ey, happy, false)
 
   -- ui contextual instructions
   if state == "quiz" then
