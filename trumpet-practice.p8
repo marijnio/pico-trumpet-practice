@@ -281,6 +281,7 @@ function _draw()
     else
       print("adjust with \139/\145", 34, 104, 7)
     end
+    draw_elephant(116, 122, true, true)
     return
   end
 
@@ -339,6 +340,19 @@ function _draw()
 
   draw_valves(34, 100)
   draw_air()
+
+  -- draw elephant mascot
+  local happy = false
+  if state == "result" then
+    happy = is_correct
+  elseif state == "play_along" then
+    local beat_len = flr(1800 / tempo)
+    local beat = flr(play_along_timer / beat_len) + 1
+    if beat > 8 and not failed then
+      happy = true
+    end
+  end
+  draw_elephant(18, 86, happy, false)
 
   -- ui contextual instructions
   if state == "quiz" then
@@ -500,4 +514,64 @@ function play_click()
   poke(addr + 66, 0)
   poke(addr + 67, 0)
   sfx(4, 2)
+end
+
+function draw_elephant(x, y, happy, flip)
+  local d = flip and -1 or 1
+
+  -- back legs (dark blue, color 1)
+  rectfill(x - 6 * d, y - 3, x - 3 * d, y, 1)
+  rectfill(x + 1 * d, y - 3, x + 4 * d, y, 1)
+
+  -- front legs (lavender, color 13)
+  rectfill(x - 4 * d, y - 4, x - 1 * d, y, 13)
+  rectfill(x + 2 * d, y - 4, x + 5 * d, y, 13)
+
+  -- body
+  circfill(x, y - 6, 7, 13)
+
+  -- head
+  circfill(x, y - 13, 5, 13)
+
+  -- cheek blush (pink, color 14)
+  pset(x + 2 * d, y - 12, 14)
+
+  -- eyes
+  if happy then
+    -- curved happy eye
+    line(x + 1 * d, y - 14, x + 2 * d, y - 15, 0)
+    line(x + 2 * d, y - 15, x + 3 * d, y - 14, 0)
+  else
+    -- normal dot eye
+    pset(x + 2 * d, y - 14, 0)
+  end
+
+  -- back ear (dark blue, color 1)
+  circfill(x - 5 * d, y - 14, 4, 1)
+
+  -- front ear (lavender & pink inner)
+  local flap = 0
+  if happy then
+    flap = flr(sin(t() * 8) * 2)
+  end
+  circfill(x - 4 * d, y - 13 + flap, 4, 13)
+  circfill(x - 4 * d, y - 13 + flap, 2, 14)
+
+  -- trunk
+  if happy then
+    line(x + 4 * d, y - 12, x + 7 * d, y - 11, 13)
+    line(x + 7 * d, y - 11, x + 8 * d, y - 14, 13)
+    line(x + 8 * d, y - 14, x + 7 * d, y - 16, 13)
+
+    -- floating music note (yellow, color 10)
+    local note_t = (t() * 0.8) % 1
+    local nx = x + 7 * d + note_t * 12 * d
+    local ny = y - 16 - note_t * 12 + sin(t() * 6) * 2
+    circfill(nx, ny, 1, 10)
+    line(nx + 1, ny, nx + 1, ny - 3, 10)
+    pset(nx + 2, ny - 3, 10)
+  else
+    line(x + 4 * d, y - 12, x + 6 * d, y - 10, 13)
+    line(x + 6 * d, y - 10, x + 6 * d, y - 7, 13)
+  end
 end

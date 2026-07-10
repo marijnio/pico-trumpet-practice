@@ -76,6 +76,13 @@ This application represents this mechanic via **Air levels (1–5)**:
 * **Level 4 (4th Partial Group):** C#5 to E5 (e.g., E5 is open `0-0-0` on Air 4)
 * **Level 5 (5th Partial Group):** F5 to G5 (e.g., G5 is open `0-0-0` on Air 5)
 
+## 🐘 Ellie the Elephant Mascot!
+
+To make your practice sessions more encouraging, **Ellie the Elephant** acts as your mascot:
+* **Title Menu:** Ellie sits in the bottom-right corner, flapping her ears and blowing happy musical notes.
+* **Practice & Play Modes:** Ellie stands in the lower-left corner, keeping you company.
+* **Interactive Feedback:** Whenever you submit a correct answer or successfully complete a play-along note, Ellie celebrates by flapping her ears happily and blowing a musical note from her trunk!
+
 ---
 
 ## 🛠️ Installation on Retro Handhelds (e.g., RG35XXSP)
