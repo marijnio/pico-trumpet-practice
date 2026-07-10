@@ -13,7 +13,8 @@ This tool helps trumpet players practice both **valve fingerings** and **air pre
 * **Valve & Air Representation:**
   * **Valves:** Simulates the three physical trumpet valves.
   * **Air Pressure / Partials:** Simulates embouchure and air speed requirements by dividing notes into 5 air levels (harmonic partial groups).
-* **Randomized Selection:** Every note in the range has an equal chance of appearing, providing a uniform practice distribution across the entire database.
+* **Smart Repetition (Practice Mode):** Utilizes a lightweight Spaced Repetition System (SRS). Incorrectly answered notes double in weight (making them appear more frequently), while correct answers halve in weight to prevent redundant drill.
+* **Randomized progression (Play-Along Mode):** Notes are chosen randomly from the selection pool to provide a diverse, hands-free playing session.
 * **Three Flexible Modes:** 
   * **Quiz Mode:** Tests your recall of both valve fingerings and air pressure levels using interactive controls on the device.
   * **Play-Along Mode (Hands-Free):** Specifically designed for practicing with your **actual trumpet** in hand. It guides you rhythmically using audio metronome clicks and pitches.

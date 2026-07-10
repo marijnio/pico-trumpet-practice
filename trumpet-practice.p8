@@ -80,6 +80,8 @@ function _init()
         col = rnd({ 5, 6, 13 })
       }
     )
+  for n in all(notes) do
+    n.w = 1
   end
 
   pick_new_note()
@@ -93,10 +95,12 @@ function pick_new_note()
     end
   end
 
-  if #active_notes == 0 then
-    note = rnd(notes)
+  local selection_pool = #active_notes > 0 and active_notes or notes
+
+  if state == "quiz" or state == "result" then
+    note = pick_weighted_note(selection_pool)
   else
-    note = rnd(active_notes)
+    note = rnd(selection_pool)
   end
 
   user_v = { false, false, false }
@@ -118,13 +122,21 @@ function _update()
 
     if menu_opt == 3 then
       if btnp(0) then
-        if ref_flavor == "list" then ref_flavor = "sticky"
-        elseif ref_flavor == "valves" then ref_flavor = "list"
-        else ref_flavor = "valves" end
+        if ref_flavor == "list" then
+          ref_flavor = "sticky"
+        elseif ref_flavor == "valves" then
+          ref_flavor = "list"
+        else
+          ref_flavor = "valves"
+        end
       elseif btnp(1) then
-        if ref_flavor == "list" then ref_flavor = "valves"
-        elseif ref_flavor == "valves" then ref_flavor = "sticky"
-        else ref_flavor = "list" end
+        if ref_flavor == "list" then
+          ref_flavor = "valves"
+        elseif ref_flavor == "valves" then
+          ref_flavor = "sticky"
+        else
+          ref_flavor = "list"
+        end
       end
     elseif menu_opt == 4 then
       if btnp(0) then min_air = max(1, min_air - 1) end
@@ -276,9 +288,11 @@ function _update()
         is_correct = true
         score += 1
         sfx(0)
+        note.w = max(0.2, note.w * 0.5)
       else
         is_correct = false
         sfx(1)
+        note.w = min(5, note.w * 2)
       end
       state = "result"
     end
@@ -338,7 +352,7 @@ function _draw()
     rectfill(0, 110, 128, 112, 11) -- light green top grass line
 
     rectfill(0, 0, 128, 12, 1) -- dark blue banner for title
-    print("trumpet trainer", 4, 4, 7)
+    print("pico trumpet trainer", 4, 4, 7)
 
     rectfill(12, 24, 116, 101, 7) -- white paper/card menu box
     rect(12, 24, 116, 101, 5) -- dark gray menu outline
@@ -378,7 +392,7 @@ function _draw()
 
   -- header
   rectfill(0, 0, 128, 12, 0)
-  print("trumpet trainer", 4, 4, 7)
+  print("pico trumpet trainer", 4, 4, 7)
 
   if state == "quiz" or state == "result" or state == "play_along" then
     local score_str = score .. "/" .. total
@@ -484,7 +498,8 @@ function _draw()
     elseif ref_flavor == "valves" then
       print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
       print("\151:play note  \142:quit", 24, 122, 7)
-    else -- sticky
+    else
+      -- sticky
       print("hold \139/\131/\145:valves \148:cycle air", 6, 114, 6)
       print("\151:play note  \142:quit", 24, 122, 7)
     end
@@ -741,4 +756,21 @@ function find_note_by_pitch(p)
     end
   end
   return nil
+end
+
+function pick_weighted_note(note_list)
+  local total_w = 0
+  for n in all(note_list) do
+    total_w += n.w
+  end
+
+  local r = rnd(total_w)
+  local sum = 0
+  for n in all(note_list) do
+    sum += n.w
+    if r <= sum then
+      return n
+    end
+  end
+  return note_list[1]
 end
