@@ -13,6 +13,7 @@ function _init()
   ref_flavor = "list"
   ref_v = { false, false, false }
   ref_air = 1
+  playing_p = nil
 
   -- practice state variables
   score = 0
@@ -116,8 +117,14 @@ function _update()
     if btnp(3) then menu_opt = min(7, menu_opt + 1) end
 
     if menu_opt == 3 then
-      if btnp(0) or btnp(1) then
-        ref_flavor = ref_flavor == "list" and "valves" or "list"
+      if btnp(0) then
+        if ref_flavor == "list" then ref_flavor = "sticky"
+        elseif ref_flavor == "valves" then ref_flavor = "list"
+        else ref_flavor = "valves" end
+      elseif btnp(1) then
+        if ref_flavor == "list" then ref_flavor = "valves"
+        elseif ref_flavor == "valves" then ref_flavor = "sticky"
+        else ref_flavor = "list" end
       end
     elseif menu_opt == 4 then
       if btnp(0) then min_air = max(1, min_air - 1) end
@@ -190,25 +197,31 @@ function _update()
         end
       end
     else
-      -- valves mode
-      local changed = false
-      if btnp(0) then ref_v[1] = not ref_v[1] changed = true end
-      if btnp(1) then ref_v[3] = not ref_v[3] changed = true end
-      if btnp(2) then
-        ref_air = ref_air + 1
-        if ref_air > 5 then ref_air = 1 end
-        changed = true
-      end
-      if btnp(3) then ref_v[2] = not ref_v[2] changed = true end
+      -- valves or sticky mode
+      if ref_flavor == "sticky" then
+        ref_v[1] = btn(0)
+        ref_v[3] = btn(1)
+        ref_v[2] = btn(3)
 
-      if changed then
-        stop_pitch()
-        ref_playing = false
+        if btnp(2) then
+          ref_air = ref_air + 1
+          if ref_air > 5 then ref_air = 1 end
+        end
+      else
+        -- toggle valves mode
+        if btnp(0) then ref_v[1] = not ref_v[1] end
+        if btnp(1) then ref_v[3] = not ref_v[3] end
+        if btnp(2) then
+          ref_air = ref_air + 1
+          if ref_air > 5 then ref_air = 1 end
+        end
+        if btnp(3) then ref_v[2] = not ref_v[2] end
       end
 
       if btnp(4) then
         stop_pitch()
         ref_playing = false
+        playing_p = nil
         state = "menu"
       end
 
@@ -222,12 +235,19 @@ function _update()
             local pitch_val = is_bb and found.p - 2 or found.p
             play_pitch(pitch_val)
             ref_playing = true
+            playing_p = p
+          elseif playing_p ~= p then
+            stop_pitch()
+            local pitch_val = is_bb and found.p - 2 or found.p
+            play_pitch(pitch_val)
+            playing_p = p
           end
         end
       else
         if ref_playing then
           stop_pitch()
           ref_playing = false
+          playing_p = nil
         end
       end
     end
@@ -461,8 +481,11 @@ function _draw()
     if ref_flavor == "list" then
       print("\139/\145:navigate  \151:play note", 14, 114, 6)
       print("press \142 for menu", 30, 122, 7)
-    else
+    elseif ref_flavor == "valves" then
       print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
+      print("\151:play note  \142:quit", 24, 122, 7)
+    else -- sticky
+      print("hold \139/\131/\145:valves \148:cycle air", 6, 114, 6)
       print("\151:play note  \142:quit", 24, 122, 7)
     end
   elseif state == "play_along" then
