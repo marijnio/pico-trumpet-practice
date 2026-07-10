@@ -575,8 +575,6 @@ function draw_valves(start_x, y)
     if beat <= 8 then
       reveal = false
     end
-  elseif state == "quiz" then
-    reveal = false
   end
 
   local slide_1_out = false
