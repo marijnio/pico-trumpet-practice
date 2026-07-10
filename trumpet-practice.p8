@@ -243,27 +243,33 @@ function _draw()
   cls(1)
 
   if state == "menu" then
-    for s in all(stars) do
-      pset(s.x, s.y, s.col)
-    end
+    cls(12) -- sky blue
 
-    rectfill(0, 0, 128, 12, 0)
+    -- draw savanna sun
+    circfill(116, 16, 6, 10) -- yellow sun
+
+    -- draw grass hills
+    rectfill(0, 110, 128, 128, 3) -- dark green savanna ground
+    rectfill(0, 110, 128, 112, 11) -- light green top grass line
+
+    rectfill(0, 0, 128, 12, 1) -- dark blue banner for title
     print("trumpet trainer", 4, 4, 7)
 
-    rect(12, 24, 116, 101, 5)
+    rectfill(12, 24, 116, 101, 7) -- white paper/card menu box
+    rect(12, 24, 116, 101, 5) -- dark gray menu outline
 
-    print("select mode:", 36, 28, 6)
+    print("select mode:", 36, 28, 5) -- dark gray subtitle
 
-    local c1 = menu_opt == 1 and 10 or 6
-    local c2 = menu_opt == 2 and 10 or 6
-    local c3 = menu_opt == 3 and 10 or 6
-    local c4 = menu_opt == 4 and 10 or 6
-    local c5 = menu_opt == 5 and 10 or 6
-    local c6 = menu_opt == 6 and 10 or 6
-    local c7 = menu_opt == 7 and 10 or 6
+    local c1 = menu_opt == 1 and 8 or 1
+    local c2 = menu_opt == 2 and 8 or 1
+    local c3 = menu_opt == 3 and 8 or 1
+    local c4 = menu_opt == 4 and 8 or 1
+    local c5 = menu_opt == 5 and 8 or 1
+    local c6 = menu_opt == 6 and 8 or 1
+    local c7 = menu_opt == 7 and 8 or 1
 
     local sel_y = 38 + (menu_opt - 1) * 9
-    rectfill(24, sel_y - 1, 108, sel_y + 6, 2)
+    rectfill(24, sel_y - 1, 108, sel_y + 6, 15) -- peach/light orange selection bar
 
     print("practice", 36, 38, c1)
     print("play-along", 36, 47, c2)
@@ -274,12 +280,12 @@ function _draw()
     print("tempo: < " .. tempo .. " > bpm", 36, 92, c7)
 
     local arrow_x = 28 + sin(t() * 2) * 2
-    print(">", arrow_x, sel_y, 10)
+    print(">", arrow_x, sel_y, 8) -- red selection arrow
 
     if menu_opt <= 3 then
-      print("press \151 to start", 28, 104, 7)
+      print("press \151 to start", 28, 104, 1) -- dark blue on sky background
     else
-      print("adjust with \139/\145", 34, 104, 7)
+      print("adjust with \139/\145", 34, 104, 1) -- dark blue on sky background
     end
     draw_elephant(116, 122, true, true)
     return
@@ -348,7 +354,7 @@ function _draw()
   elseif state == "play_along" then
     local beat_len = flr(1800 / tempo)
     local beat = flr(play_along_timer / beat_len) + 1
-    if beat > 8 and not failed then
+    if (beat >= 5 and beat <= 8) or (beat > 8 and not failed) then
       happy = true
     end
   end
@@ -565,8 +571,8 @@ function draw_elephant(x, y, happy, flip)
 
     -- floating music note (yellow, color 10)
     local note_t = (t() * 0.8) % 1
-    local nx = x + 7 * d + note_t * 12 * d
-    local ny = y - 16 - note_t * 12 + sin(t() * 6) * 2
+    local nx = x + 7 * d + note_t * 16
+    local ny = y - 16 - note_t * 16 + sin(t() * 6) * 2
     circfill(nx, ny, 1, 10)
     line(nx + 1, ny, nx + 1, ny - 3, 10)
     pset(nx + 2, ny - 3, 10)
