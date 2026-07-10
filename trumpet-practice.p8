@@ -23,7 +23,7 @@ function _init()
   
   -- difficulty ranges
   min_air = 1
-  max_air = 5
+  max_air = 2
   is_bb = true
   tempo = 60
   
