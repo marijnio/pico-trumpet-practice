@@ -57,9 +57,8 @@ The **Play-Along Mode** is designed for practice sessions where you are holding 
    * The correct valve fingerings and air pressure level are revealed on screen.
    * Verify your fingerings and partial against the diagram.
 
-### Hands-Free Logging & Flagging:
-- **No button presses needed for correct answers:** At the end of the 12 beats, if you do nothing, the system automatically grades the note as **correct** (adding to your score) and moves to the next note.
-- **Trivial correction (one-tap flagging):** If you missed the note, cracked the partial, or used the wrong fingering, **press any button** (except `O` which exits) during the cycle. The screen will display `[FLAGGED WRONG]`, play a confirmation tone, and record the answer as wrong at the end of the cycle.
+### Hands-Free Flow:
+- **Automatic progression:** At the end of the 12 beats, the system automatically marks the note as completed (adding to your score) and moves to the next note.
 - **Exiting:** Press the **A button / O key** at any time to immediately stop the pitch drone and return to the main menu.
 
 ---

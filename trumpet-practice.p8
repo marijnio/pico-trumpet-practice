@@ -213,26 +213,12 @@ function _update()
       end
     end
 
-    local pressed_any = false
-    for i = 0, 3 do
-      if btnp(i) then pressed_any = true end
-    end
-    if btnp(5) then pressed_any = true end
-
-    if pressed_any and not failed then
-      failed = true
-      sfx(1)
-    end
-
     play_along_timer += 1
 
     if play_along_timer >= cycle_len then
-      if not failed then
-        score += 1
-      end
+      score += 1
       total += 1
 
-      failed = false
       play_along_timer = 0
       pick_new_note()
     end
@@ -354,7 +340,7 @@ function _draw()
   elseif state == "play_along" then
     local beat_len = flr(1800 / tempo)
     local beat = flr(play_along_timer / beat_len) + 1
-    if (beat >= 5 and beat <= 8) or (beat > 8 and not failed) then
+    if beat >= 5 then
       happy = true
     end
   end
@@ -378,7 +364,7 @@ function _draw()
     print("\139/\145: navigate notes", 22, 114, 6)
     print("press \142 for menu", 30, 122, 7)
   elseif state == "play_along" then
-    print("any key: flag wrong", 34, 14, 6)
+    print("press \142 to exit", 30, 14, 6)
 
     local beat_len = flr(1800 / tempo)
     local beat = flr(play_along_timer / beat_len) + 1
@@ -412,11 +398,6 @@ function _draw()
       else
         circ(dx, 123, 2, 0)
       end
-    end
-
-    if failed then
-      rectfill(28, 86, 100, 94, 8)
-      print("flagged wrong", 34, 88, 7)
     end
   end
 end
