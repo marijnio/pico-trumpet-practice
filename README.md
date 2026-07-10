@@ -17,7 +17,9 @@ This tool helps trumpet players practice both **valve fingerings** and **air pre
 * **Three Flexible Modes:** 
   * **Quiz Mode:** Tests your recall of both valve fingerings and air pressure levels using interactive controls on the device.
   * **Play-Along Mode (Hands-Free):** Specifically designed for practicing with your **actual trumpet** in hand. It guides you rhythmically using audio metronome clicks and pitches.
-  * **Reference Mode:** Allows you to browse through all notes chronologically to review their correct fingerings and air levels.
+  * **Reference Mode:** Allows you to browse through notes or explore combinations. You can choose between two flavors on the main menu:
+    * **List Flavor:** Chronologically browse through all 26 notes from low to high to review correct fingerings and air levels.
+    * **Valves Flavor:** Actively configure the valves and air levels to explore sound pitches interactively (looks up and draws the resulting note on the staff in real-time).
 
 ---
 
@@ -32,7 +34,7 @@ Since the application is designed to be played on handheld retro consoles (like 
 | **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Cycle **Air Pressure** (1 to 5) |
 | **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (2nd valve) |
 | **Button 1 (O)** | `Z` / `C` | **A** | Return to Menu | **Quit / Return to Menu** |
-| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select | **Submit Answer** (in Quiz) / **Continue** (in Result) |
+| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select (on menu) / Hold to play note (in Reference) | **Submit Answer** (in Quiz) / **Continue** (in Result) |
 
 > [!NOTE]
 > **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, simply press **D-Pad Up** to cycle through air pressure levels 1–5.

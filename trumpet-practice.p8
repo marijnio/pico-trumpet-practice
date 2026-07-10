@@ -9,6 +9,10 @@ function _init()
   state = "menu"
   menu_opt = 1
   ref_idx = 1
+  ref_playing = false
+  ref_flavor = "list"
+  ref_v = { false, false, false }
+  ref_air = 1
 
   -- practice state variables
   score = 0
@@ -111,7 +115,11 @@ function _update()
     if btnp(2) then menu_opt = max(1, menu_opt - 1) end
     if btnp(3) then menu_opt = min(7, menu_opt + 1) end
 
-    if menu_opt == 4 then
+    if menu_opt == 3 then
+      if btnp(0) or btnp(1) then
+        ref_flavor = ref_flavor == "list" and "valves" or "list"
+      end
+    elseif menu_opt == 4 then
       if btnp(0) then min_air = max(1, min_air - 1) end
       if btnp(1) then
         min_air = min(5, min_air + 1)
@@ -146,12 +154,83 @@ function _update()
       elseif menu_opt == 3 then
         state = "reference"
         ref_idx = 1
+        ref_v = { false, false, false }
+        ref_air = 1
       end
     end
   elseif state == "reference" then
-    if btnp(0) then ref_idx = max(1, ref_idx - 1) end
-    if btnp(1) then ref_idx = min(#notes, ref_idx + 1) end
-    if btnp(4) then state = "menu" end
+    if ref_flavor == "list" then
+      if btnp(0) then
+        stop_pitch()
+        ref_playing = false
+        ref_idx = max(1, ref_idx - 1)
+      end
+      if btnp(1) then
+        stop_pitch()
+        ref_playing = false
+        ref_idx = min(#notes, ref_idx + 1)
+      end
+      if btnp(4) then
+        stop_pitch()
+        ref_playing = false
+        state = "menu"
+      end
+
+      if btn(5) then
+        if not ref_playing then
+          local ref_note = notes[ref_idx]
+          local p = is_bb and ref_note.p - 2 or ref_note.p
+          play_pitch(p)
+          ref_playing = true
+        end
+      else
+        if ref_playing then
+          stop_pitch()
+          ref_playing = false
+        end
+      end
+    else
+      -- valves mode
+      local changed = false
+      if btnp(0) then ref_v[1] = not ref_v[1] changed = true end
+      if btnp(1) then ref_v[3] = not ref_v[3] changed = true end
+      if btnp(2) then
+        ref_air = ref_air + 1
+        if ref_air > 5 then ref_air = 1 end
+        changed = true
+      end
+      if btnp(3) then ref_v[2] = not ref_v[2] changed = true end
+
+      if changed then
+        stop_pitch()
+        ref_playing = false
+      end
+
+      if btnp(4) then
+        stop_pitch()
+        ref_playing = false
+        state = "menu"
+      end
+
+      -- find note matching ref_v and ref_air
+      local p = get_pitch(ref_v, ref_air)
+      local found = find_note_by_pitch(p)
+
+      if btn(5) then
+        if found then
+          if not ref_playing then
+            local pitch_val = is_bb and found.p - 2 or found.p
+            play_pitch(pitch_val)
+            ref_playing = true
+          end
+        end
+      else
+        if ref_playing then
+          stop_pitch()
+          ref_playing = false
+        end
+      end
+    end
   elseif state == "quiz" then
     if btnp(0) then user_v[1] = not user_v[1] end
     if btnp(1) then user_v[3] = not user_v[3] end
@@ -259,7 +338,7 @@ function _draw()
 
     print("practice", 36, 38, c1)
     print("play-along", 36, 47, c2)
-    print("reference", 36, 56, c3)
+    print("ref: < " .. ref_flavor .. " >", 36, 56, c3)
     print("min air: < " .. min_air .. " >", 36, 65, c4)
     print("max air: < " .. max_air .. " >", 36, 74, c5)
     print("trumpet: < " .. (is_bb and "bB" or "c") .. " >", 36, 83, c6)
@@ -294,41 +373,57 @@ function _draw()
     line(20, line_y, 108, line_y, 7)
   end
 
-  local draw_note = state == "reference" and notes[ref_idx] or note
+  local draw_note = nil
+  if state == "reference" then
+    if ref_flavor == "list" then
+      draw_note = notes[ref_idx]
+    else
+      local p = get_pitch(ref_v, ref_air)
+      draw_note = find_note_by_pitch(p)
+    end
+  else
+    draw_note = note
+  end
 
   -- note letter name
-  local show_name = true
-  if state == "quiz" then
-    show_name = false
-  elseif state == "play_along" then
-    local beat_len = flr(1800 / tempo)
-    local beat = flr(play_along_timer / beat_len) + 1
-    if beat <= 8 then
+  if draw_note then
+    local show_name = true
+    if state == "quiz" then
       show_name = false
+    elseif state == "play_along" then
+      local beat_len = flr(1800 / tempo)
+      local beat = flr(play_along_timer / beat_len) + 1
+      if beat <= 8 then
+        show_name = false
+      end
     end
-  end
 
-  if show_name then
-    print(draw_note.name, 4, 38, 10)
+    if show_name then
+      print(draw_note.name, 4, 38, 10)
+    else
+      print("?", 4, 38, 5)
+    end
+
+    -- dynamic ledger lines
+    local l_y = 64
+    while l_y <= draw_note.y do
+      line(56, l_y, 72, l_y, 7)
+      l_y += 8
+    end
+
+    -- accidentals (sharp/flat)
+    local acc = sub(draw_note.name, 2, 2)
+    if acc == "#" or acc == "b" or acc == "B" then
+      print(acc, 54, draw_note.y - 2, 7)
+    end
+
+    -- note head
+    circfill(64, draw_note.y, 4, 10)
   else
+    -- draw_note is nil (only possible in reference mode valves flavor)
     print("?", 4, 38, 5)
+    print("?", 62, 52, 5)
   end
-
-  -- dynamic ledger lines
-  local l_y = 64
-  while l_y <= draw_note.y do
-    line(56, l_y, 72, l_y, 7)
-    l_y += 8
-  end
-
-  -- accidentals (sharp/flat)
-  local acc = sub(draw_note.name, 2, 2)
-  if acc == "#" or acc == "b" or acc == "B" then
-    print(acc, 54, draw_note.y - 2, 7)
-  end
-
-  -- note head
-  circfill(64, draw_note.y, 4, 10)
 
   draw_valves(34, 100)
   draw_air()
@@ -343,6 +438,8 @@ function _draw()
     if beat >= 5 then
       happy = true
     end
+  elseif state == "reference" then
+    happy = ref_playing
   end
   draw_elephant(18, 86, happy, false)
 
@@ -361,8 +458,13 @@ function _draw()
       print("\151:next  \142:quit", 36, 121, 7)
     end
   elseif state == "reference" then
-    print("\139/\145: navigate notes", 22, 114, 6)
-    print("press \142 for menu", 30, 122, 7)
+    if ref_flavor == "list" then
+      print("\139/\145:navigate  \151:play note", 14, 114, 6)
+      print("press \142 for menu", 30, 122, 7)
+    else
+      print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
+      print("\151:play note  \142:quit", 24, 122, 7)
+    end
   elseif state == "play_along" then
     print("press \142 to exit", 30, 14, 6)
 
@@ -403,7 +505,14 @@ function _draw()
 end
 
 function draw_valves(start_x, y)
-  local draw_note = state == "reference" and notes[ref_idx] or note
+  local draw_note = nil
+  if state == "reference" then
+    if ref_flavor == "list" then
+      draw_note = notes[ref_idx]
+    end
+  else
+    draw_note = note
+  end
 
   local reveal = true
   if state == "play_along" then
@@ -417,7 +526,13 @@ function draw_valves(start_x, y)
   for i = 1, 3 do
     local vx = start_x + (i - 1) * 24
     local active = user_v[i]
-    if (state == "result" and not is_correct) or state == "reference" or (state == "play_along" and reveal) then
+    if state == "reference" then
+      if ref_flavor == "list" then
+        active = draw_note.v[i]
+      else
+        active = ref_v[i]
+      end
+    elseif (state == "result" and not is_correct) or (state == "play_along" and reveal) then
       active = draw_note.v[i]
     end
 
@@ -438,7 +553,14 @@ function draw_valves(start_x, y)
 end
 
 function draw_air()
-  local draw_note = state == "reference" and notes[ref_idx] or note
+  local draw_note = nil
+  if state == "reference" then
+    if ref_flavor == "list" then
+      draw_note = notes[ref_idx]
+    end
+  else
+    draw_note = note
+  end
   local active_air = user_air
   local col = 12
 
@@ -456,7 +578,11 @@ function draw_air()
     active_air = draw_note.air
     col = is_correct and 11 or 8
   elseif state == "reference" then
-    active_air = draw_note.air
+    if ref_flavor == "list" then
+      active_air = draw_note.air
+    else
+      active_air = ref_air
+    end
     col = 11
   end
 
@@ -561,4 +687,35 @@ function draw_elephant(x, y, happy, flip)
     line(x + 4 * d, y - 12, x + 6 * d, y - 10, 13)
     line(x + 6 * d, y - 10, x + 6 * d, y - 7, 13)
   end
+end
+
+function get_pitch(v, air)
+  local natural_pitches = { 24, 31, 36, 40, 43 }
+  local base = natural_pitches[air]
+
+  local offset = 0
+  if v[1] and v[2] and v[3] then
+    offset = -6
+  elseif v[1] and v[3] then
+    offset = -5
+  elseif v[2] and v[3] then
+    offset = -4
+  elseif (v[1] and v[2]) or v[3] then
+    offset = -3
+  elseif v[1] then
+    offset = -2
+  elseif v[2] then
+    offset = -1
+  end
+
+  return base + offset
+end
+
+function find_note_by_pitch(p)
+  for n in all(notes) do
+    if n.p == p then
+      return n
+    end
+  end
+  return nil
 end
