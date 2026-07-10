@@ -45,13 +45,13 @@ The **Play-Along Mode** is designed for practice sessions where you are holding 
 
 1. **Prepare Phase (Beats 1-4):**
    * The staff displays the target note.
-   * The fingerings and air pressure indicators are hidden (marked with `?` or grayed out).
+   * The note name, fingerings, and air pressure indicators are hidden (marked with `?` or grayed out).
    * A metronome click plays on each beat to give you a count-in.
 2. **Play Phase (Beats 5-8):**
    * Play the note on your physical trumpet!
    * The metronome continues clicking.
    * The console plays a sustained **reference pitch tone** corresponding to the note. Use this tone to guide your pitch target and intonation.
-   * Fingerings remain hidden.
+   * Note name, fingerings, and air pressure indicators remain hidden.
 3. **Reveal Phase (Beats 9-12):**
    * The reference tone stops.
    * The correct valve fingerings and air pressure level are revealed on screen.

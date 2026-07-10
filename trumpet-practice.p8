@@ -299,7 +299,22 @@ function _draw()
   local draw_note = state == "reference" and notes[ref_idx] or note
   
   -- note letter name
-  print(draw_note.name, 4, 38, 10)
+  local show_name = true
+  if state == "quiz" then
+    show_name = false
+  elseif state == "play_along" then
+    local beat_len = flr(1800 / tempo)
+    local beat = flr(play_along_timer / beat_len) + 1
+    if beat <= 8 then
+      show_name = false
+    end
+  end
+  
+  if show_name then
+    print(draw_note.name, 4, 38, 10)
+  else
+    print("?", 4, 38, 5)
+  end
   
   -- dynamic ledger lines
   local l_y = 64
