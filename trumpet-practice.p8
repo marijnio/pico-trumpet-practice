@@ -296,13 +296,17 @@ function _update()
         sfx(1)
         note.w = min(5, note.w * 2)
       end
+      local p = is_bb and note.p - 2 or note.p
+      play_pitch(p)
       state = "result"
     end
   elseif state == "result" then
     if btnp(4) then
+      stop_pitch()
       state = "menu"
     end
     if btnp(5) then
+      stop_pitch()
       pick_new_note()
       state = "quiz"
     end
@@ -388,7 +392,7 @@ function _draw()
     else
       print("adjust with \139/\145", 34, 104, 1) -- dark blue on sky background
     end
-    draw_elephant(116, 122, true, true)
+    draw_elephant(116, 122, true, true, true)
     return
   end
 
@@ -471,15 +475,18 @@ function _draw()
 
   -- draw elephant mascot
   local happy = false
+  local playing = false
   local ex = 18
   local ey = 86
   if state == "result" then
     happy = is_correct
+    playing = true
   elseif state == "play_along" then
     local beat_len = flr(1800 / tempo)
     local beat = flr(play_along_timer / beat_len) + 1
     if beat >= 5 and beat <= 8 then
       happy = true
+      playing = true
     end
     -- bounce and sway dance to the beat!
     local phase = (play_along_timer % beat_len) / beat_len
@@ -487,8 +494,9 @@ function _draw()
     ex = ex + (beat % 2 == 1 and 1 or -1) * flr(sin(phase * 0.5) * 2)
   elseif state == "reference" then
     happy = ref_playing
+    playing = ref_playing
   end
-  draw_elephant(ex, ey, happy, false)
+  draw_elephant(ex, ey, playing, happy, false)
 
   -- ui contextual instructions
   if state == "quiz" then
@@ -709,7 +717,7 @@ function play_click()
   sfx(4, 2)
 end
 
-function draw_elephant(x, y, happy, flip)
+function draw_elephant(x, y, playing, happy, flip)
   local d = flip and -1 or 1
 
   -- back legs (dark blue, color 1)
@@ -744,14 +752,14 @@ function draw_elephant(x, y, happy, flip)
 
   -- front ear (lavender & pink inner)
   local flap = 0
-  if happy then
+  if playing then
     flap = flr(sin(t() * 8) * 2)
   end
   circfill(x - 4 * d, y - 13 + flap, 4, 13)
   circfill(x - 4 * d, y - 13 + flap, 2, 14)
 
   -- trunk
-  if happy then
+  if playing then
     line(x + 4 * d, y - 12, x + 7 * d, y - 11, 13)
     line(x + 7 * d, y - 11, x + 8 * d, y - 14, 13)
     line(x + 8 * d, y - 14, x + 7 * d, y - 16, 13)
