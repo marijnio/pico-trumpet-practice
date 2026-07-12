@@ -142,8 +142,9 @@ function _update()
       end
     elseif menu_opt == 4 then
       if btnp(0) then min_air = max(1, min_air - 1) end
-      if btnp(1) then
-        min_air = min(5, min_air + 1)
+      if btnp(1) or btnp(5) then
+        min_air = min_air + 1
+        if min_air > 5 then min_air = 1 end
         if max_air < min_air then max_air = min_air end
       end
     elseif menu_opt == 5 then
@@ -151,12 +152,19 @@ function _update()
         max_air = max(1, max_air - 1)
         if min_air > max_air then min_air = max_air end
       end
-      if btnp(1) then max_air = min(5, max_air + 1) end
+      if btnp(1) or btnp(5) then
+        max_air = max_air + 1
+        if max_air > 5 then max_air = 1 end
+        if min_air > max_air then min_air = max_air end
+      end
     elseif menu_opt == 6 then
-      if btnp(0) or btnp(1) then is_bb = not is_bb end
+      if btnp(0) or btnp(1) or btnp(5) then is_bb = not is_bb end
     elseif menu_opt == 7 then
       if btnp(0) then tempo = max(40, tempo - 5) end
-      if btnp(1) then tempo = min(120, tempo + 5) end
+      if btnp(1) or btnp(5) then
+        tempo = tempo + 5
+        if tempo > 120 then tempo = 40 end
+      end
     end
 
     if btnp(5) and menu_opt <= 3 then
@@ -390,7 +398,7 @@ function _draw()
     if menu_opt <= 3 then
       print("press \151 to start", 28, 104, 1) -- dark blue on sky background
     else
-      print("adjust with \139/\145", 34, 104, 1) -- dark blue on sky background
+      print("adjust: \139/\145 or press \151", 20, 104, 1) -- dark blue on sky background
     end
     draw_elephant(116, 122, true, true, true)
     return
@@ -500,7 +508,7 @@ function _draw()
 
   -- ui contextual instructions
   if state == "quiz" then
-    print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
+    print("\139/\153/\145:valves \148:cycle air", 16, 114, 6)
     print("\151:submit  \142:quit", 32, 122, 7)
   elseif state == "result" then
     if is_correct then
@@ -517,11 +525,11 @@ function _draw()
       print("\139/\145:navigate  \151:play note", 14, 114, 6)
       print("press \142 for menu", 30, 122, 7)
     elseif ref_flavor == "valves" then
-      print("\139/\131/\145:valves \148:cycle air", 16, 114, 6)
+      print("\139/\153/\145:valves \148:cycle air", 16, 114, 6)
       print("\151:play note  \142:quit", 24, 122, 7)
     else
       -- sticky
-      print("hold \139/\131/\145:valves \148:cycle air", 6, 114, 6)
+      print("hold \139/\153/\145:valves \148:cycle air", 6, 114, 6)
       print("\151:play note  \142:quit", 24, 122, 7)
     end
   elseif state == "play_along" then

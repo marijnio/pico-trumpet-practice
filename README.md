@@ -35,8 +35,8 @@ Since the application is designed to be played on handheld retro consoles (like 
 | **Right** | `Right Arrow` | **D-Pad Right** | Adjust settings (on menu) / Navigate Reference (Next) | Toggle **Valve 3** (3rd valve) |
 | **Up** | `Up Arrow` | **D-Pad Up** | Move Selection Up | Cycle **Air Pressure** (1 to 5) |
 | **Down** | `Down Arrow` | **D-Pad Down** | Move Selection Down | Toggle **Valve 2** (2nd valve) |
-| **Button 1 (O)** | `Z` / `C` | **A** | Return to Menu | **Quit / Return to Menu** |
-| **Button 2 (X)** | `X` / `V` | **B** | Confirm / Select (on menu) / Hold to play note (in Reference) | **Submit Answer** (in Quiz) / **Continue** (in Result) |
+| **Button 4 (🅾️)** | `Z` / `C` | **A** | Return to Menu | **Quit / Return to Menu** |
+| **Button 5 (❎)** | `X` / `V` | **B** | Confirm / Select (on menu) / Hold to play note (in Reference) | **Submit Answer** (in Quiz) / **Continue** (in Result) |
 
 > [!NOTE]
 > **Adjusting Air Pressure in Quiz Mode:** To change the air level indicator on the right side of the screen, simply press **D-Pad Up** to cycle through air pressure levels 1–5.
@@ -63,7 +63,7 @@ The **Play-Along Mode** is designed for practice sessions where you are holding 
 
 ### Hands-Free Flow:
 - **Automatic progression:** At the end of the 12 beats, the system automatically marks the note as completed (adding to your score) and moves to the next note.
-- **Exiting:** Press the **A button / O key** at any time to immediately stop the pitch drone and return to the main menu.
+- **Exiting:** Press the **🅾️ button (Z/C key)** at any time to immediately stop the pitch drone and return to the main menu.
 
 ---
 
